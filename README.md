@@ -5,6 +5,7 @@ Single file Chatbot for Web Browsers
 
 
 #
+- open the `flexchat.html` file in any browser
 - bring your own OpenRouter API Key
 - 150+ Models
 - saves you data in local storage on your browser
