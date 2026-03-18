@@ -80,14 +80,12 @@ tailwind.config = {
     --c-cream:   #1a1208;
     --c-text:    #3a3028;
   }
-
   
   /* Scrollbar */
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: #3d3d48; border-radius: 2px; }
   ::-webkit-scrollbar-thumb:hover { background: #6b6b7a; }
-
   /* Prose styles for markdown */
   .prose-msg { line-height: 1.65; color: #c8c8d8; }
   .prose-msg p { margin: 0 0 0.6em; }
@@ -137,7 +135,6 @@ tailwind.config = {
   .prose-msg table { border-collapse: collapse; width: 100%; margin: 0.5em 0; font-size: 0.85em; }
   .prose-msg th { background: #2a2a32; color: #e8e4dc; padding: 5px 8px; text-align: left; }
   .prose-msg td { border-top: 1px solid #2a2a32; padding: 5px 8px; }
-
   /* User bubble prose */
   .prose-user { line-height: 1.65; color: #1a1a1f; }
   .prose-user p { margin: 0 0 0.5em; }
@@ -145,27 +142,20 @@ tailwind.config = {
   .prose-user code { background: rgba(0,0,0,0.12); padding: 0.1em 0.3em; border-radius: 3px; font-size: 0.875em; }
   .prose-user pre { background: rgba(0,0,0,0.15); border-radius: 5px; padding: 10px 12px; overflow-x: auto; margin: 0.5em 0; }
   .prose-user strong { font-weight: 500; }
-
   /* Textarea auto-resize trick */
   textarea { resize: none; overflow: hidden; }
-
   /* Sidebar transition */
   #sidebar { transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
   #overlay { transition: opacity 0.3s ease; }
-
   /* Thinking dots */
   .dot-1 { animation: blink 1.2s 0s infinite; }
   .dot-2 { animation: blink 1.2s 0.2s infinite; }
   .dot-3 { animation: blink 1.2s 0.4s infinite; }
-
   .msg-anim { opacity: 0; animation: fadeUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-
   /* Model select */
   select { -webkit-appearance: none; appearance: none; }
-
   /* Focus ring override */
   textarea:focus, input:focus, select:focus { outline: none; box-shadow: 0 0 0 1.5px #d4a853; }
-
 /* Apply variables to all the fixed-color elements */
   body                { background: var(--c-bg); }
   #sidebar            { background: var(--c-surface); border-color: var(--c-border); }
@@ -179,7 +169,6 @@ tailwind.config = {
   .text-pearl         { color: var(--c-pearl) !important; }
   .text-cream         { color: var(--c-cream) !important; }
   .border-mist        { border-color: var(--c-mist) !important; }
-
   /* Prose text in light mode */
   body.light .prose-msg          { color: var(--c-text); }
   body.light .prose-msg code     { background: rgba(0,0,0,0.08); color: #b06000; }
@@ -187,27 +176,19 @@ tailwind.config = {
   body.light .prose-msg pre code { color: var(--c-text); }
   body.light .prose-msg strong   { color: var(--c-cream); }
   body.light .prose-msg blockquote { color: var(--c-ghost); }
-
   /* Input/select backgrounds */
   body.light textarea,
   body.light input[type="text"],
   body.light input[type="password"],
   body.light input[type="number"],
   body.light select               { background: var(--c-surface); color: var(--c-cream); }
-
   /* Conversation list hover */
   body.light #conv-list [class*="hover:bg-ash"]:hover { background: var(--c-border) !important; }
   body.light #conv-list [class*="bg-mist"]            { background: var(--c-mist) !important; }
-
   /* Message container */
   body.light #messages            { background: var(--c-bg); }
-
   /* Scrollbar in light mode */
   body.light ::-webkit-scrollbar-thumb { background: var(--c-mist); }
-
-
-
-
 </style>
 </head>
 <body class="h-screen flex overflow-hidden text-pearl">
@@ -553,7 +534,7 @@ tailwind.config = {
   <div id="messages" class="flex-1 overflow-y-auto px-4 py-6 space-y-6">
     <!-- Empty state -->
     <div id="empty-state" class="h-full flex flex-col items-center justify-center text-center py-16 opacity-100 transition-opacity duration-300">
-      <div class="font-display text-5xl italic text-cream/20 mb-4 select-none">Nexus</div>
+      <div class="font-display text-5xl italic text-cream/20 mb-4 select-none">FlexChat</div>
       <div class="text-fog text-sm font-mono max-w-xs">Enter your OpenRouter API key in the sidebar, choose a model, and start a conversation.</div>
       <div class="mt-8 grid grid-cols-2 gap-2 max-w-xs w-full">
         <button onclick="insertPrompt('Explain quantum computing in simple terms')" class="text-left px-3 py-2.5 bg-ash hover:bg-mist border border-mist rounded-md text-xs font-mono text-ghost hover:text-pearl transition-all">
@@ -607,19 +588,15 @@ let currentChatId = null;
 let isStreaming = false;
 let abortController = null;
 let chats = {}; // { id: { id, title, messages: [], createdAt } }
-
 // ── Init ───────────────────────────────────────────────────────────────────
 function init() {
   if (localStorage.getItem('nexus_privacy_seen')) dismissPrivacyNotice();
-
   if (localStorage.getItem('nexus_theme') === 'light') toggleTheme(); // ← add this
-
   loadSettings();
   loadChats();
   updateModelBadge();
   newChat();
 }
-
 function dismissPrivacyNotice() {
   document.getElementById('privacy-modal').remove();
   localStorage.setItem('nexus_privacy_seen', '1');
@@ -643,7 +620,6 @@ function saveSettings() {
   localStorage.setItem('nexus_settings', JSON.stringify(settings));
   updateModelBadge();
 }
-
 function loadSettings() {
   try {
     const s = JSON.parse(localStorage.getItem('nexus_settings') || '{}');
@@ -657,32 +633,26 @@ function loadSettings() {
     if (s.maxTokens) document.getElementById('max-tokens').value = s.maxTokens;
   } catch(e) {}
 }
-
 function updateModelBadge() {
   const model = document.getElementById('model-select').value;
   const short = model.split('/').pop();
   document.getElementById('model-badge').textContent = '— ' + short;
 }
-
 function toggleKeyVisibility() {
   const input = document.getElementById('api-key');
   input.type = input.type === 'password' ? 'text' : 'password';
 }
-
 // ── Chat Management ────────────────────────────────────────────────────────
 function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
-
 function saveChats() {
   localStorage.setItem('nexus_chats', JSON.stringify(chats));
 }
-
 function loadChats() {
   try {
     chats = JSON.parse(localStorage.getItem('nexus_chats') || '{}');
   } catch(e) { chats = {}; }
   renderConvList();
 }
-
 function newChat() {
   const id = genId();
   chats[id] = { id, title: 'New conversation', messages: [], createdAt: Date.now() };
@@ -694,7 +664,6 @@ function newChat() {
   document.getElementById('chat-title').textContent = 'New conversation';
   document.getElementById('user-input').focus();
 }
-
 function switchChat(id) {
   if (isStreaming) stopStreaming();
   currentChatId = id;
@@ -704,7 +673,6 @@ function switchChat(id) {
   document.getElementById('chat-title').textContent = chat.title;
   closeSidebar();
 }
-
 function deleteChat(id, e) {
   e.stopPropagation();
   delete chats[id];
@@ -712,7 +680,6 @@ function deleteChat(id, e) {
   if (currentChatId === id) newChat();
   else renderConvList();
 }
-
 function clearCurrentChat() {
   if (!currentChatId) return;
   chats[currentChatId].messages = [];
@@ -722,7 +689,6 @@ function clearCurrentChat() {
   renderConvList();
   renderMessages();
 }
-
 function renderConvList() {
   const list = document.getElementById('conv-list');
   const sorted = Object.values(chats).sort((a,b) => b.createdAt - a.createdAt);
@@ -740,18 +706,15 @@ function renderConvList() {
     </div>
   `).join('');
 }
-
 // ── Message Rendering ──────────────────────────────────────────────────────
 // Store message content by key so onclick attrs never embed raw content
 const msgContentMap = {};
-
 function renderMessages() {
   const container = document.getElementById('messages');
   const msgs = chats[currentChatId]?.messages || [];
-
   if (msgs.length === 0) {
     container.innerHTML = `<div id="empty-state" class="h-full flex flex-col items-center justify-center text-center py-16">
-      <div class="font-display text-5xl italic text-cream/20 mb-4 select-none">Nexus</div>
+      <div class="font-display text-5xl italic text-cream/20 mb-4 select-none">FlexChat</div>
       <div class="text-fog text-sm font-mono max-w-xs">Enter your OpenRouter API key in the sidebar, choose a model, and start a conversation.</div>
       <div class="mt-8 grid grid-cols-2 gap-2 max-w-xs w-full">
         <button onclick="insertPrompt('Explain quantum computing in simple terms')" class="text-left px-3 py-2.5 bg-ash hover:bg-mist border border-mist rounded-md text-xs font-mono text-ghost hover:text-pearl transition-all">Explain quantum computing →</button>
@@ -763,7 +726,6 @@ function renderMessages() {
     document.getElementById('token-info').classList.add('hidden');
     return;
   }
-
   document.getElementById('token-info').classList.remove('hidden');
   container.innerHTML = msgs.map((m, i) => renderMessage(m, i)).join('');
   // Wire up copy buttons via data attributes (avoids embedding content in onclick)
@@ -773,7 +735,6 @@ function renderMessages() {
   updateTokenCount();
   scrollToBottom(false);
 }
-
 function renderMessage(msg, idx) {
   const key = currentChatId + '_' + idx;
   msgContentMap[key] = msg.content;
@@ -806,7 +767,6 @@ function renderMessage(msg, idx) {
     </div>`;
   }
 }
-
 function renderMarkdown(text) {
   if (!text) return '';
   try {
@@ -816,37 +776,29 @@ function renderMarkdown(text) {
     return escHtml(text).replace(/\n/g, '<br>');
   }
 }
-
 function escHtml(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-
 function formatTime(ts) {
   if (!ts) return '';
   return new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
-
 function scrollToBottom(smooth = true) {
   const c = document.getElementById('messages');
   c.scrollTo({ top: c.scrollHeight, behavior: smooth ? 'smooth' : 'instant' });
 }
-
 // ── Send Message ───────────────────────────────────────────────────────────
 async function sendMessage() {
   const input = document.getElementById('user-input');
   const text = input.value.trim();
   if (!text || isStreaming) return;
-
   const apiKey = document.getElementById('api-key').value.trim();
   if (!apiKey) { showError('Please enter your OpenRouter API key in the sidebar.'); return; }
-
   hideError();
   input.value = '';
   autoResize(input);
-
   const chat = chats[currentChatId];
   const model = document.getElementById('model-select').value;
-
   // Add user message
   chat.messages.push({ role: 'user', content: text, ts: Date.now() });
   
@@ -856,9 +808,7 @@ async function sendMessage() {
     document.getElementById('chat-title').textContent = chat.title;
     renderConvList();
   }
-
   saveChats();
-
   // Directly append user bubble — never wipe the container mid-stream
   const container = document.getElementById('messages');
   document.getElementById('empty-state')?.remove();
@@ -873,7 +823,6 @@ async function sendMessage() {
     </div>`;
   container.appendChild(userBubble);
   scrollToBottom(false);
-
   // Add assistant placeholder
   const placeholderId = 'streaming-' + genId();
   const placeholder = document.createElement('div');
@@ -891,18 +840,15 @@ async function sendMessage() {
     </div>`;
   container.appendChild(placeholder);
   scrollToBottom(false);
-
   // Disable send
   isStreaming = true;
   setSendState(true);
   abortController = new AbortController();
-
   // Build messages array for API
   const systemPrompt = document.getElementById('system-prompt').value.trim();
   const apiMessages = chat.messages
     .filter(m => m.role === 'user' || m.role === 'assistant')
     .map(m => ({ role: m.role, content: m.content }));
-
   const body = {
     model,
     messages: apiMessages,
@@ -911,10 +857,8 @@ async function sendMessage() {
     max_tokens: parseInt(document.getElementById('max-tokens').value),
   };
   if (systemPrompt) body.messages = [{ role: 'system', content: systemPrompt }, ...body.messages];
-
   let fullResponse = '';
   let usage = null;
-
   try {
     const resp = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
@@ -922,29 +866,25 @@ async function sendMessage() {
         'Authorization': 'Bearer ' + apiKey,
         'Content-Type': 'application/json',
         'HTTP-Referer': window.location.href,
-        'X-Title': 'Nexus Chat',
+        'X-Title': 'FlexChat',
       },
       body: JSON.stringify(body),
       signal: abortController.signal,
     });
-
     if (!resp.ok) {
       const err = await resp.json().catch(() => ({}));
       throw new Error(err?.error?.message || `HTTP ${resp.status}`);
     }
-
     const reader = resp.body.getReader();
     const decoder = new TextDecoder();
     const contentEl = document.getElementById(placeholderId + '-content');
     let buffer = '';
-
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
       buffer += decoder.decode(value, { stream: true });
       const lines = buffer.split('\n');
       buffer = lines.pop();
-
       for (const line of lines) {
         if (!line.startsWith('data: ')) continue;
         const data = line.slice(6).trim();
@@ -970,7 +910,6 @@ async function sendMessage() {
       return;
     }
   }
-
   // Finalize
   placeholder.remove();
   chat.messages.push({ role: 'assistant', content: fullResponse, model: model.split('/').pop(), ts: Date.now(), usage });
@@ -980,11 +919,9 @@ async function sendMessage() {
   setSendState(false);
   updateTokenCount();
 }
-
 function stopStreaming() {
   if (abortController) abortController.abort();
 }
-
 function setSendState(streaming) {
   const btn = document.getElementById('send-btn');
   if (streaming) {
@@ -1001,7 +938,6 @@ function setSendState(streaming) {
     btn.classList.add('bg-amber');
   }
 }
-
 // ── Helpers ────────────────────────────────────────────────────────────────
 function handleKeydown(e) {
   const charCount = document.getElementById('char-count');
@@ -1011,36 +947,30 @@ function handleKeydown(e) {
     sendMessage();
   }
 }
-
 function autoResize(el) {
   el.style.height = 'auto';
   el.style.height = Math.min(el.scrollHeight, 192) + 'px';
 }
-
 function insertPrompt(text) {
   const input = document.getElementById('user-input');
   input.value = text;
   autoResize(input);
   input.focus();
 }
-
 function showError(msg) {
   document.getElementById('error-text').textContent = msg;
   document.getElementById('error-banner').classList.remove('hidden');
   setTimeout(hideError, 6000);
 }
 function hideError() { document.getElementById('error-banner').classList.add('hidden'); }
-
 async function copyText(text) {
   try { await navigator.clipboard.writeText(text); } catch(e) {}
 }
-
 function updateTokenCount() {
   const msgs = chats[currentChatId]?.messages || [];
   const approx = msgs.reduce((sum, m) => sum + Math.ceil((m.content || '').length / 4), 0);
   document.getElementById('token-count').textContent = approx.toLocaleString();
 }
-
 function exportChat() {
   const chat = chats[currentChatId];
   if (!chat || !chat.messages.length) return;
@@ -1055,7 +985,6 @@ function exportChat() {
   a.click();
   URL.revokeObjectURL(a.href);
 }
-
 function openSidebar() {
   const s = document.getElementById('sidebar');
   const o = document.getElementById('overlay');
@@ -1063,7 +992,6 @@ function openSidebar() {
   o.classList.remove('hidden');
   requestAnimationFrame(() => o.classList.remove('opacity-0'));
 }
-
 function closeSidebar() {
   const s = document.getElementById('sidebar');
   const o = document.getElementById('overlay');
@@ -1071,7 +999,6 @@ function closeSidebar() {
   o.classList.add('opacity-0');
   setTimeout(() => o.classList.add('hidden'), 300);
 }
-
 // ── Boot ───────────────────────────────────────────────────────────────────
 init();
 </script>
