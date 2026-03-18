@@ -1,6 +1,9 @@
 # FlexChat
 Single file Chatbot for Web Browsers
 
+![FlexChat Screenshot Dark Mode](https://github.com/logitcode/FlexChat/blob/main/FlexChatSS.png)
+
+
 #
 - bring your own OpenRouter API Key
 - saves you data in local storage on your browser
