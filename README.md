@@ -6,8 +6,8 @@ Single file Chatbot for Web Browsers
 
 #
 - bring your own OpenRouter API Key
+- 150+ Models
 - saves you data in local storage on your browser
-- there should always be at least 3 bullet points
 #
 ### Huggingface Demo
 
