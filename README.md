@@ -1,7 +1,7 @@
 # FlexChat - OpenRouter
 Single file Chatbot for Web Browsers
 
-![FlexChat Screenshot Dark Mode](https://github.com/logitcode/FlexChat/blob/main/FlexChatSS.png)
+![FlexChat Screenshot Dark Mode](https://github.com/logitcode/FlexChat/blob/main/extras/FlexChatSS.png)
 
 
 #
