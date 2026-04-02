@@ -371,9 +371,9 @@ tailwind.config = {
       <div class="relative">
         <select id="model-select" class="w-full bg-ash border border-mist rounded-md px-3 py-2 pr-7 text-xs font-mono text-cream focus:border-amber transition-colors cursor-pointer" onchange="saveSettings()">
 <optgroup label='Openrouter'>
+	<option value='openrouter/free'>Free Models Router </option>
 	<option value='openrouter/hunter-alpha'>Hunter Alpha </option>
 	<option value='openrouter/healer-alpha'>Healer Alpha </option>
-	<option value='openrouter/free'>Free Models Router </option>
 </optgroup>
 <optgroup label='Nvidia'>
 	<option value='nvidia/nemotron-3-super-120b-a12b:free'>NVIDIA: Nemotron 3 Super (free) </option>
@@ -697,7 +697,6 @@ function init() {
   loadSettings();
   loadChats();
   updateModelBadge();
-  newChat();
 }
 
 function dismissPrivacyNotice() {
@@ -784,7 +783,9 @@ function switchChat(id) {
   renderMessages();
   renderConvList();
   const chat = chats[id];
-  document.getElementById('chat-title').textContent = chat.title;
+ if (chat) {
+    document.getElementById('chat-title').textContent = chat.title;
+  }
   closeSidebar();
 }
 
@@ -797,9 +798,11 @@ function deleteChat(id, e) {
 }
 
 function clearCurrentChat() {
-  if (!currentChatId) return;
-  chats[currentChatId].messages = [];
-  chats[currentChatId].title = 'New conversation';
+    if (!currentChatId) return;
+  const chat = chats[currentChatId];
+  if (!chat) return;
+  chat.messages = [];
+  chat.title = 'New conversation';
   document.getElementById('chat-title').textContent = 'New conversation';
   saveChats();
   renderConvList();
@@ -808,6 +811,8 @@ function clearCurrentChat() {
 
 function renderConvList() {
   const list = document.getElementById('conv-list');
+  if (!list) return;
+
   const sorted = Object.values(chats).sort((a,b) => b.createdAt - a.createdAt);
   if (sorted.length === 0) {
     list.innerHTML = '<div class="text-fog/60 text-xs font-mono px-3 py-2">No conversations yet</div>';
@@ -830,9 +835,10 @@ const msgContentMap = {};
 
 function renderMessages() {
   const container = document.getElementById('messages');
-  const msgs = chats[currentChatId]?.messages || [];
+  const chat = chats[currentChatId];
+  const msgs = chat ? chat.messages : [];
 
-  if (msgs.length === 0) {
+  if (!chat || msgs.length === 0) {
     container.innerHTML = `<div id="empty-state" class="h-full flex flex-col items-center justify-center text-center py-16">
       <div class="font-display text-5xl italic text-cream/20 mb-4 select-none">FlexChat</div>
       <div class="text-fog text-sm font-mono max-w-xs">Enter your OpenRouter API key in the sidebar, choose a model, and start a conversation.</div>
@@ -875,7 +881,7 @@ function renderMessage(msg, idx) {
   } else {
     return `<div class="flex gap-3 items-start">
       <div class="w-7 h-7 rounded-md bg-gradient-to-br from-amber to-ember flex items-center justify-center flex-shrink-0 mt-0.5 shadow-md">
-        <span class="text-ink text-xs font-display font-bold italic">N</span>
+        <span class="text-ink text-xs font-display font-bold italic">Bot</span>
       </div>
       <div class="flex-1 min-w-0 group">
         <div class="text-xs font-mono text-ghost mb-1.5">${escHtml(msg.model || 'assistant')}</div>
@@ -923,7 +929,10 @@ async function sendMessage() {
   const input = document.getElementById('user-input');
   const text = input.value.trim();
   if (!text || isStreaming) return;
-
+  
+  if (!currentChatId || !chats[currentChatId]) {
+    newChat();
+  }
   const apiKey = document.getElementById('api-key').value.trim();
   if (!apiKey) { showError('Please enter your OpenRouter API key in the sidebar.'); return; }
 
@@ -968,7 +977,7 @@ async function sendMessage() {
   placeholder.className = 'flex gap-3 items-start';
   placeholder.innerHTML = `
     <div class="w-7 h-7 rounded-md bg-gradient-to-br from-amber to-ember flex items-center justify-center flex-shrink-0 mt-0.5 shadow-md">
-      <span class="text-ink text-xs font-display font-bold italic">N</span>
+      <span class="text-ink text-xs font-display font-bold italic">Bot</span>
     </div>
     <div class="flex-1 min-w-0">
       <div class="text-xs font-mono text-ghost mb-1.5">${escHtml(model.split('/').pop())}</div>
